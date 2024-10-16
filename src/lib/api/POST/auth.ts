@@ -15,7 +15,7 @@ export async function loginToProtheus(username: string, password: string) {
 	// Fazendo a requisição ao web service do Protheus
 	console.log('Enviando requisição para o Protheus com:', { username, password });
 
-	const res = await fetch('http://protheus-app:8400/rest/api/oauth2/v1/token', requestOptions);
+	const res = await fetch('http://rodoapp:8080/api/auth', requestOptions);
 
 	// Verifica se a resposta foi bem-sucedida
 	if (!res.ok) {

@@ -44,7 +44,6 @@
 	};
 </script>
 
-
 <!-- Estrutura HTML com Formulário -->
 <div
 	class="shadow-3xl z-50 mx-auto w-full max-w-md rounded-none border border-gray-300 bg-white p-4 md:rounded-2xl md:p-8 dark:border-gray-800 dark:bg-black"
@@ -90,21 +89,22 @@
 		<!-- Links adicionais -->
 		<div class="flex gap-3">
 			<button
-				class="group/btn shadow-input relative flex h-10 w-full items-center justify-start space-x-2 rounded-md bg-gray-50 px-4 font-medium text-black dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
+				class="group/btn relative flex h-10 w-full items-center justify-start space-x-2 rounded-md bg-gray-50 px-4 font-medium text-black shadow-input dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
 				type="button"
 			>
 				<IconProgressHelp class="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
-				<a href="hesk.rodoparana.com.br" class="text-sm text-neutral-700 dark:text-neutral-300"
-					>Central de Ajuda</a
+				<a
+					href="http://hesk.rodoparana.com.br"
+					class="text-sm text-neutral-700 dark:text-neutral-300">Central de Ajuda</a
 				>
 			</button>
 
 			<button
-				class="group/btn shadow-input relative flex h-10 w-full items-center justify-start space-x-2 rounded-md bg-gray-50 px-4 font-medium text-black dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
+				class="group/btn relative flex h-10 w-full items-center justify-start space-x-2 rounded-md bg-gray-50 px-4 font-medium text-black shadow-input dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
 				type="button"
 			>
 				<IconCloudComputing class="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
-				<a href="#" class="text-sm text-neutral-700 dark:text-neutral-300">Intranet</a>
+				<a href="https://sites.google.com/site/baserodoparana/home" class="text-sm text-neutral-700 dark:text-neutral-300">Intranet</a>
 			</button>
 		</div>
 	</form>
