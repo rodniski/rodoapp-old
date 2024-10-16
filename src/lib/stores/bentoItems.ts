@@ -18,7 +18,7 @@ export const BentoItems = [
 		icon: IconTruck
 	},
 	{
-		title: 'Gerador de Assinaturas',
+		title: 'Gerador de Assinatura de email',
 		description: 'Acabou de entrar na empresa e precisa de uma assinatura? Crie já a sua.',
 		href: '/assinatura',
 		lottie: 'https://cdn.lordicon.com/fikcyfpp.json',
@@ -28,7 +28,7 @@ export const BentoItems = [
 	{
 		title: 'Intranet',
 		description: 'Quer conhecer mais sobre nossos processos? Acesse a nossa nova documentação.',
-		href: '/intranet',
+		href: 'https://sites.google.com/site/baserodoparana/home',
 		lottie: 'https://cdn.lordicon.com/fqbvgezn.json',
 		className: 'md:col-span-2',
 		icon: IconCloud
