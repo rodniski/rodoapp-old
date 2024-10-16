@@ -1,0 +1,1 @@
+export { incluirItemPortaria } from './borracharia';

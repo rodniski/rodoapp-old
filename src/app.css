@@ -1,0 +1,28 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* Estilos globais para fonte */
+html,
+body {
+	font-family: 'Roboto', sans-serif;
+}
+
+/* Estilos para autofill */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+	-webkit-box-shadow: 0 0 0 1000px black inset !important; /* Fundo preto no modo escuro */
+	-webkit-text-fill-color: #fff !important; /* Texto branco no modo escuro */
+	transition: background-color 5000s ease-in-out 0s;
+}
+/* Estilo para autofill que herda o estilo padrão dos inputs */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+	background-color: inherit !important; /* Herdar o fundo normal do input */
+	color: inherit !important; /* Herdar a cor do texto */
+	border: inherit !important; /* Herdar o estilo de borda */
+	-webkit-box-shadow: none !important; /* Remove o box-shadow imposto pelo autofill */
+	transition: background-color 5000s ease-in-out 0s; /* Evita transições inesperadas */
+}
