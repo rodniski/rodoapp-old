@@ -11,7 +11,7 @@
 	onMount(() => {
 		token = sessionStorage.getItem('token'); // Obtém o token do sessionStorage
 
-		if (!token && $page.url.pathname !== '/') {
+		if (!token) {
 			goto('/login');
 		}
 	});
