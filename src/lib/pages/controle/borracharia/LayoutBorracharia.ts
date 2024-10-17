@@ -1,8 +1,7 @@
 // src/lib/components/portaria/Borracharia/columns.ts
-import { UserAvatar } from '$components';
+import { ClienteBadge, UserAvatar } from '$components';
 import type { Borracharia, Column } from '$types';
 import ActionBorracharia from './ActionBorracharia.svelte'; // Importa o componente Action
-
 
 export const LayoutBorracharia: Column<Borracharia>[] = [
 	{
@@ -10,35 +9,40 @@ export const LayoutBorracharia: Column<Borracharia>[] = [
 		header: 'Vendedor',
 		component: UserAvatar,
 		props: (row: Borracharia) => ({ username: row.Vendedor }),
-		isFilterable: true
+		isFilterable: true,
+		class: 'w-48'
 	},
 
 	{
 		accessorKey: 'Filial',
 		header: 'Filial',
 		cell: (row: Borracharia) => row.Filial,
-		isFilterable: true
+		isFilterable: true,
+		class: 'w-48'
 	},
 	{
 		accessorKey: 'NF',
 		header: 'Nota Fiscal',
 		cell: (row: Borracharia) => row.NF,
-		isFilterable: true
-	},
-	{
-		accessorKey: 'Cliente',
-		header: 'Cliente',
-		cell: (row: Borracharia) => row.Cliente,
-		isFilterable: true
+		isFilterable: true,
+		class: 'w-56 truncate'
 	},
 	{
 		accessorKey: 'Emissao',
 		header: 'Emissão',
 		cell: (row: Borracharia) => row.Emissao,
+		isFilterable: true,
+		class: 'w-48'
+	},
+	{
+		accessorKey: 'Cliente',
+		header: 'Cliente',
+		component: ClienteBadge,
+		props: (row: Borracharia) => ({ clienteNome: row.Cliente }),
 		isFilterable: true
 	},
 	{
-		accessorKey: 'actions',
+		accessorKey: 'Produtos',
 		header: 'Ações',
 		component: ActionBorracharia,
 		props: (row: Borracharia) => ({
@@ -46,6 +50,7 @@ export const LayoutBorracharia: Column<Borracharia>[] = [
 			clienteCompleto: row.Cliente,
 			filial: row.Filial
 		}),
-		isFilterable: false
+		isFilterable: false,
+		class: 'w-36'
 	}
 ];

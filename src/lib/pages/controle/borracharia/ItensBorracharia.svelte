@@ -2,15 +2,14 @@
 	import { onMount } from 'svelte';
 	import { IconTagsFilled } from '@tabler/icons-svelte';
 	import type { ItemNF } from '$types';
+	import { tableFetching } from '$api'; // Importando a função tableFetching para fazer a requisição
 
 	export let documentoCompleto: string;
 	export let clienteCompleto: string;
 	export let filial: string;
 
 	export let itensSelecionados: ItemNF[] = [];
-
 	let errorMessageFetch = '';
-	let usuario: string = ''; // Pode ser dinâmico conforme necessário
 
 	// Função para separar documento e série
 	function separarDocumentoESerie(docCompleto: string): { documento: string; serie: string } {
@@ -30,64 +29,41 @@
 		return { cliente, loja };
 	}
 
-	// Função para buscar itens da NF utilizando o endpoint listanfs
+	// Função para buscar itens da NF utilizando a função tableFetching
 	async function fetchItensNF() {
 		const { documento, serie } = separarDocumentoESerie(documentoCompleto);
 		const { cliente, loja } = separarClienteLoja(clienteCompleto);
 
-		const filialTrimmed = filial?.trim();
-		if (!filialTrimmed || !/^\d{4}$/.test(filialTrimmed)) {
-			errorMessageFetch = `Filial inválida: Deve conter exatamente 4 dígitos numéricos. Valor atual: '${filialTrimmed}'`;
-			console.error(errorMessageFetch);
-			return;
-		}
-
-		// Definir os headers conforme os filtros necessários
-		const headers = {
-			'Content-Type': 'application/json',
-			'X-Filial': filialTrimmed,
-			'X-Documento': documento.trim(),
-			'X-Serie': serie.trim(),
-			'X-Cliente': cliente.trim(),
-			'X-Loja': loja.trim()
+		const filters = {
+			Documento: documento.trim(),
+			Serie: serie.trim(),
+			Cliente: cliente.trim(),
+			Loja: loja.trim(),
+			Filial: filial?.trim()
 		};
 
-		console.log('Headers da requisição:', headers);
-
-		const url = `http://rodoapp:8080/api/pneus/borracharia/listanfs`;
-
 		try {
-			const response = await fetch(url, {
-				method: 'GET',
-				headers: headers
-			});
+			const result = await tableFetching<ItemNF>(
+				'api/pneus/borracharia/listanfs',
+				'Inclusao',
+				'desc',
+				1,
+				15,
+				filters
+			);
+			console.log('Dados recebidos da API:', result);
 
-			console.log('Status da resposta:', response.status);
-
-			if (!response.ok) {
-				const errorText = await response.text();
-				console.error('Erro na resposta da API:', errorText);
-				throw new Error(
-					`Erro ao buscar itens: ${response.status} ${response.statusText} - ${errorText}`
-				);
-			}
-
-			const data = await response.json();
-			console.log('Dados recebidos da API:', data);
-
-			if (!data || data.length === 0) {
+			if (result.data.length === 0) {
 				console.warn('Nenhum item foi retornado pela API.');
 			}
 
-			// Processar os dados recebidos e atualizar itensSelecionados
-			itensSelecionados =
-				data.map((item: any) => ({
-					D2_ITEM: item.D2_ITEM?.trim(),
-					D2_COD: item.D2_COD?.trim(),
-					B1_DESC: item.B1_DESC?.trim(),
-					SALDO: Number(item.SALDO), // Garantir que SALDO é um número
-					quantity: 0 // Inicializa quantity com zero
-				})) || [];
+			itensSelecionados = result.data.map((item) => ({
+				D2_ITEM: item.D2_ITEM?.trim(),
+				D2_COD: item.D2_COD?.trim(),
+				B1_DESC: item.B1_DESC?.trim(),
+				SALDO: Number(item.SALDO),
+				quantity: 0 // Inicializa com zero
+			}));
 		} catch (error: any) {
 			console.error('Erro ao buscar itens da NF:', error);
 			errorMessageFetch = `Erro ao carregar itens da nota fiscal: ${error.message}`;

@@ -12,7 +12,7 @@ export const menuItems: MenuSection[] = [
 	{
 		title: 'Início',
 		icon: IconHome,
-		link: '/'
+		link: '/app'
 	},
 	{
 		title: 'Lançamento de Notas',

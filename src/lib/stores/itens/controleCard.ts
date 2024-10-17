@@ -8,7 +8,7 @@ export const ControleCards = [
 	{
 		text: 'Portaria',
 		description: 'Ao porteiro responsável pela conferência de pneus em saída da empresa.',
-		link: '/controle-itens/portaria'
+		link: '/controle-itens/conferencia'
 	},
 	{
 		text: 'Histórico',

@@ -39,12 +39,12 @@
 		<!-- Botão para abrir o drawer -->
 		<label
 			for="themeDrawer"
-			class="btn btn-primary fixed right-5 top-5 z-0"
+			class="btn btn-neutral fixed right-5 top-5 z-0 shadow-xl"
 			aria-label="Alterar tema"
 		>
 			<lord-icon
 				src="https://cdn.lordicon.com/atcauaaj.json"
-				trigger="hover"
+				trigger="loop"
 				stroke="bold"
 				colors="primary:#ffffff,secondary:#ffffff"
 				style="width:35px;height:35px"

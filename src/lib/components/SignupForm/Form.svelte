@@ -11,28 +11,54 @@
 	let password = '';
 	let error = '';
 
+	// Função auxiliar para definir cookies
+	function setCookie(name: string, value: string, days: number) {
+		const date = new Date();
+		date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000); // Expira em "days" dias
+		const expires = `expires=${date.toUTCString()}`;
+		document.cookie = `${name}=${value}; ${expires}; path=/`; // Define o cookie para o domínio inteiro
+	}
+
+	// Função auxiliar para obter o valor de um cookie
+	function getCookie(name: string): string | null {
+		const nameEQ = name + '=';
+		const ca = document.cookie.split(';');
+		for (let i = 0; i < ca.length; i++) {
+			let c = ca[i].trim();
+			if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+		}
+		return null;
+	}
+
 	// Função de login
 	const handleSubmit = async (e: SubmitEvent) => {
 		e.preventDefault(); // Previne o comportamento padrão do formulário
 		error = ''; // Reseta a mensagem de erro
+
+		if (!username || !password) {
+			toast.error('Por favor, preencha todos os campos.', {
+				className: 'bg-warning text-black'
+			});
+			return;
+		}
 
 		// Usando o `toast.promise` para lidar com o login
 		toast
 			.promise(
 				loginToProtheus(username, password), // Passando a função de login como a Promise
 				{
-					loading: 'Realizando login...', // Mensagem enquanto a Promise está pendente
-					success: 'Login bem-sucedido!', // Mensagem quando a Promise é resolvida
-					error: 'Erro ao fazer o login. Senha Incorreta' // Mensagem quando a Promise é rejeitada
+					loading: 'Realizando login...',
+					success: 'Login bem-sucedido!',
+					error: 'Erro ao fazer o login. Verifique suas credenciais.'
 				}
 			)
 			.then((data) => {
-				// Salva o token no sessionStorage
-				sessionStorage.setItem('token', data.access_token);
-				sessionStorage.setItem('username', username);
+				// Salva o token em um cookie que expira em 7 dias
+				setCookie('token', data.access_token, 7);
+				setCookie('username', username, 7);
 
 				// Redireciona o usuário para a página inicial
-				goto('/');
+				goto('/app');
 			})
 			.catch((err) => {
 				// Captura o erro e exibe no console
@@ -104,7 +130,10 @@
 				type="button"
 			>
 				<IconCloudComputing class="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
-				<a href="https://sites.google.com/site/baserodoparana/home" class="text-sm text-neutral-700 dark:text-neutral-300">Intranet</a>
+				<a
+					href="https://sites.google.com/site/baserodoparana/home"
+					class="text-sm text-neutral-700 dark:text-neutral-300">Intranet</a
+				>
 			</button>
 		</div>
 	</form>

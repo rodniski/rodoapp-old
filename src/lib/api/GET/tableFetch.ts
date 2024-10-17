@@ -1,3 +1,5 @@
+import { getCookie } from "$hooks";
+
 export const tableFetching = async <T>(
 	endpoint: string, // Endpoint dinâmico para a API
 	sortBy: string,
@@ -8,7 +10,7 @@ export const tableFetching = async <T>(
 	filters: Record<string, any> = {} // Novo parâmetro: filtros opcionais
 ): Promise<{ data: T[]; hasMore: boolean }> => {
 	try {
-		const token = sessionStorage.getItem('token');
+		const token = getCookie('token');
 		if (!token) {
 			throw new Error('Token não encontrado no sessionStorage');
 		}
@@ -16,11 +18,6 @@ export const tableFetching = async <T>(
 		// Usando o objeto Headers nativo para lidar com chaves dinâmicas
 		const headers = new Headers({
 			'Content-Type': 'application/json',
-			'X-Page': page.toString(), // Usa o número da página dinâmico
-			'X-Page-Size': pageSize.toString(), // Tamanho da página dinâmico
-			'X-Sort-By': sortBy, // Ordenação
-			'X-Sort-Order': sortOrder, // Ordem de classificação
-			Authorization: `Bearer ${token}` // Token no header
 		});
 
 		// Adiciona os filtros nos headers dinamicamente

@@ -1,24 +1,22 @@
+// src/stores.ts
 import { writable } from 'svelte/store';
 
-// Estado inicial dos filtros
-const initialFilters = {};
+// Define uma store para armazenar os filtros da tabela
+export const filterStore = writable<Record<string, string>>({});
 
-// Store de filtros
-export const filterStore = writable<Record<string, string>>(initialFilters);
-
-// Função para aplicar um filtro
-export function setFilter(key: string, value: string) {
+// Função para atualizar um filtro na store
+export const setFilter = (columnKey: string, value: string) => {
 	filterStore.update((filters) => {
 		if (value) {
-			filters[key] = value;
+			filters[columnKey] = value; // Adiciona/Atualiza o filtro
 		} else {
-			delete filters[key]; // Remove o filtro se o valor for vazio
+			delete filters[columnKey]; // Remove o filtro se estiver vazio
 		}
 		return filters;
 	});
-}
+};
 
-// Função para resetar os filtros
-export function resetFilters() {
+// Função para limpar todos os filtros
+export const resetFilters = () => {
 	filterStore.set({});
-}
+};

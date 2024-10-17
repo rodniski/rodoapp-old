@@ -5,13 +5,17 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { Toaster } from 'svelte-french-toast';
-	let token;
+	import { getCookie } from '$hooks';
 
-	// Função para verificar e redirecionar para login se o token não existir
+	// Função auxiliar para obter o valor de um cookie
+
+
+	// Verificar o token e redirecionar para login se necessário
 	onMount(() => {
-		token = sessionStorage.getItem('token'); // Obtém o token do sessionStorage
+		const token = getCookie('token'); // Obtém o token do cookie
 
-		if (!token) {
+		// Se não existir token ou o usuário estiver na página de login, redireciona para login
+		if (!token && $page.url.pathname !== '/') {
 			goto('/login');
 		}
 	});
@@ -20,10 +24,10 @@
 <html lang="pt-br" class="h-screen w-screen">
 	<header class="z-10">
 		<!-- Exibe a navegação se a rota não for "/" (login) nem "/intranet" -->
-		{#if $page.url.pathname !== '/login'}
+		{#if $page.url.pathname !== '/'}
 			<Nav />
+			<ThemeChanger />
 		{/if}
-		<ThemeChanger />
 	</header>
 
 	<body class="flex max-h-screen min-h-screen w-screen items-center justify-center">

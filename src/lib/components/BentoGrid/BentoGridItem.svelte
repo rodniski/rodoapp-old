@@ -1,13 +1,15 @@
 <script lang="ts">
 	import { cn } from '$lib/utils/index';
-	import { IconArrowBigRightLines } from '@tabler/icons-svelte';
-
+	
 	export let className: string | undefined = undefined;
+	export let state: string | undefined = undefined;
 	export let lottie: string | HTMLElement | undefined = undefined;
 	export let title: string | HTMLElement | undefined = undefined;
 	export let description: string | HTMLElement | undefined = undefined;
 	export let href: string | HTMLElement | undefined = undefined;
 	export let icon: HTMLElement | undefined = undefined;
+
+	console.log(state)
 </script>
 
 <div
@@ -21,7 +23,7 @@
 			src={lottie}
 			trigger="hover"
 			stroke="light"
-			state="hover-pinch"
+			{state}
 			colors="primary:#129cd8,secondary:#FFFFFF"
 			style="width:100%;height:100%"
 		>

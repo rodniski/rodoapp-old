@@ -6,7 +6,7 @@ export interface Borracharia {
 	Produto: string;
 	TipoMov: string;
 	Emissao: string;
-	actions?: () => void;
+	Produtos?: () => void;
 }
 
 export interface Conferencia {

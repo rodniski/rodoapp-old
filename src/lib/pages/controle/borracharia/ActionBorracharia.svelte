@@ -2,15 +2,12 @@
 	import { fly } from 'svelte/transition';
 	import { circOut } from 'svelte/easing';
 	import {
-		IconCopyPlus,
 		IconTruckReturn,
 		IconUserDollar,
 		IconUser,
 		IconCar
 	} from '@tabler/icons-svelte';
 	import ItensBorracharia from './ItensBorracharia.svelte'; // Componente de Itens
-	import { toast } from 'svelte-french-toast'; // Importando toast (sem o Toaster)
-	import { incluirItemPortaria } from '$api'; // Função de inclusão via API
 	import { handleConfirm, separarDocumentoESerie, separarClienteLoja } from '$components'; // Funções auxiliares
 
 	export let documentoCompleto: string;
@@ -60,7 +57,7 @@
 </script>
 
 <!-- Botão que abre o Drawer -->
-<button class="btn btn-primary" on:click={openDrawer}>
+<button class="btn btn-neutral" on:click={openDrawer}>
 	<lord-icon
 		src="https://cdn.lordicon.com/sbnjyzil.json"
 		trigger="hover"
@@ -79,8 +76,8 @@
 
 	<!-- Conteúdo do Drawer com animação fly -->
 	<div class="drawer drawer-content" transition:fly={{ x: 400, easing: circOut }}>
-		<div class="h-screen w-full bg-base-100 p-4 text-info">
-			<h2 class="mb-4 text-xl font-bold text-primary">Seleção de Produtos</h2>
+		<div class="h-screen w-full bg-base-100 p-4">
+			<h2 class="mb-4 text-3xl font-bold text-primary text-center">Seleção de Produtos</h2>
 
 			<!-- Componente ItensBorracharia que exibe a lista de produtos -->
 			<ItensBorracharia {documentoCompleto} {clienteCompleto} {filial} bind:itensSelecionados />

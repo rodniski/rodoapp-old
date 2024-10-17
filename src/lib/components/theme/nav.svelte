@@ -2,40 +2,43 @@
 	import Logo from './Logo.svelte';
 	import { goto } from '$app/navigation';
 	import { menuItems } from '$stores';
+	import { getCookie } from '$hooks';
 
 	let username = 'Usuário';
 	let isLoading = true;
+
+	// Função para capitalizar o nome
 	function capitalize(str: string) {
 		return str.charAt(0).toUpperCase() + str.slice(1);
 	}
-	// Carregar os dados do usuário do sessionStorage
+
+	// Carregar os dados do usuário dos cookies
 	async function loadUserData() {
-		if (typeof window !== 'undefined') {
-			try {
-				const storedUsername = sessionStorage.getItem('username');
-				if (storedUsername) {
-					const [firstName, lastName] = storedUsername.split('.');
-					username = `${capitalize(firstName)} ${capitalize(lastName)}`;
-				}
-			} catch (error) {
-				console.error('Erro ao buscar o nome de usuário do sessionStorage:', error);
-			} finally {
-				isLoading = false;
+		try {
+			const storedUsername = getCookie('username'); // Obtém o username do cookie
+			if (storedUsername) {
+				const [firstName, lastName] = storedUsername.split('.');
+				username = `${capitalize(firstName)} ${capitalize(lastName)}`;
 			}
+		} catch (error) {
+			console.error('Erro ao buscar o nome de usuário dos cookies:', error);
+		} finally {
+			isLoading = false;
 		}
 	}
 
-	// Função de logout que limpa o IndexedDB e redireciona para a tela de login
+	// Função de logout que limpa os cookies e redireciona para a tela de login
 	async function handleLogout() {
 		try {
-			sessionStorage.removeItem('username');
-			sessionStorage.removeItem('token');
-			goto('/login');
+			document.cookie = 'username=; Max-Age=0'; // Remove o cookie do username
+			document.cookie = 'token=; Max-Age=0'; // Remove o cookie do token
+			goto('/login'); // Redireciona para a página de login
 		} catch (error) {
 			console.error('Erro ao fazer logout:', error);
 		}
 	}
 
+	// Chama a função para carregar os dados do usuário ao montar o componente
 	loadUserData();
 </script>
 
@@ -45,12 +48,13 @@
 
 	<!-- Conteúdo Principal -->
 	<div class="drawer-content flex flex-col">
-		<label for="my-drawer" class="btn btn-square btn-outline fixed left-5 top-5 z-10">
+		<label for="my-drawer" class="btn btn-square btn-neutral fixed left-5 top-5 z-10 shadow-xl">
 			<lord-icon
-				src="https://cdn.lordicon.com/hqymfzvj.json"
+				src="https://cdn.lordicon.com/ggnoyhfp.json"
 				trigger="hover"
-				state="hover-file-2"
-				style="width: 35px; height: 35px; filter: brightness(0) saturate(100%) invert(57%) sepia(8%) saturate(7470%) hue-rotate(175deg) brightness(90%) contrast(87%);"
+				stroke="bold"
+				colors="primary:#ffffff,secondary:#ffffff"
+				style="width: 35px; height: 35px;"
 			>
 			</lord-icon>
 		</label>

@@ -9,7 +9,7 @@
 	export let endpoint: string;
 	export let sortBy: string = 'Inclusao';
 	export let sortOrder: 'asc' | 'desc' = 'desc';
-	export let pageSize: number = 15;
+	export let pageSize: number = 10;
 
 	let error: string | null = null;
 	let pageData: any[] = [];
@@ -18,8 +18,9 @@
 	let isLoading = true;
 
 	// Observa a store de filtros
-	$: filters = $filterStore;
-	$: console.log(filters);
+	let filters: Record<string, string> = {};
+	$: filters = $filterStore; // Observa e atualiza com os filtros da store
+
 	// Função para carregar os dados da página
 	async function loadPage(page: number = 1) {
 		isLoading = true;
@@ -83,39 +84,40 @@
 	});
 </script>
 
-<div class="overflow-hidden z-1 w-full h-full">
+<div class="z-1 flex max-h-full w-full flex-col justify-between overflow-hidden">
 	{#if isLoading}
 		<p>Carregando dados...</p>
 	{:else if error}
 		<p class="text-red-500">{error}</p>
 		<!-- Exibe a mensagem de erro -->
 	{:else}
-		<div
-			class="overflow-auto scroll-insvisible border border-primary rounded-btn shadow-md w-full h-[90%]"
-		>
-			<table class="table table-pin-rows table-pin-cols z-0">
-				<thead class="h-16">
-					<tr>
+		<div class="h-full w-full overflow-auto rounded-xl bg-base-300 ">
+			<table class="table table-pin-rows table-pin-cols z-0 rounded-xl ">
+				<thead class="h-16 rounded-lg shadow-xl">
+					<tr class="bg-neutral text-white">
 						{#each columns as column}
-							<th class={column.class}>
+							{#if column.isFilterable}
 								<SortableHeader
 									title={column.header}
-									isSorted={sortBy === String(column.accessorKey) ? sortOrder : false}
+									columnKey={column.accessorKey}
+									isSorted={sortBy === column.accessorKey ? sortOrder : false}
 									onClick={() => toggleSort(column.accessorKey)}
 								/>
-							</th>
+							{:else}
+								<td class="text-lg">{column.accessorKey}</td>
+							{/if}
 						{/each}
 					</tr>
 				</thead>
 
-				<tbody class="h-full">
+				<tbody>
 					{#if pageData.length === 0}
 						<tr>
 							<td colspan={columns.length}>Nenhum dado encontrado</td>
 						</tr>
 					{:else}
 						{#each pageData as row}
-							<tr class="flex-grow 2xl:text-xl hover">
+							<tr class="hover flex-grow 2xl:text-xl">
 								{#each columns as column}
 									<td class={`h-auto ${column.class}`}>
 										{#if column.component}
@@ -136,22 +138,24 @@
 		</div>
 
 		<!-- Controles de navegação -->
-		<div class="flex justify-between pt-5">
+		<div class="my-5 flex justify-between">
 			<div>
-				<select class="select select-ghost w-full max-w-xs" on:change={handlePageSizeChange}>
+				<select class="select w-full max-w-xs bg-neutral" on:change={handlePageSizeChange}>
 					<option value="5">5</option>
-					<option value="10">10</option>
-					<option value="15" selected>15</option>
+					<option value="10" selected>10</option>
+					<option value="15">15</option>
 					<option value="30">30</option>
 					<option value="50">50</option>
 					<option value="100">100</option>
 				</select>
 			</div>
 
-			<div class="join">
-				<button class="join-item btn" on:click={prevPage} disabled={currentPage === 1}>«</button>
-				<button class="join-item btn">{currentPage}</button>
-				<button class="join-item btn" on:click={nextPage} disabled={!hasMore}>»</button>
+			<div class="join border border-neutral">
+				<button class="btn join-item btn-neutral" on:click={prevPage} disabled={currentPage === 1}
+					>«</button
+				>
+				<button class=" btn join-item btn-neutral">Página {currentPage}</button>
+				<button class="btn join-item btn-neutral" on:click={nextPage} disabled={!hasMore}>»</button>
 			</div>
 		</div>
 	{/if}
