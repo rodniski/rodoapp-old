@@ -1,13 +1,12 @@
 <script lang="ts">
 	import { Table } from '$components'; // Componente de Tabela compartilhado
-	import { LayoutBorracharia } from '$pages'; // Layout das colunas específicas
-
+	import { LayoutBorracharia, BorrachariaTableRow } from '$pages'; // Layout das colunas específicas
 	const endpoint = 'api/borracharia'; // Endpoint da API
 	const defaultSortBy: string = 'Emissao'; // Coluna padrão para ordenação
 	const defaultSortOrder: 'asc' | 'desc' = 'desc'; // Ordem padrão
 </script>
 
-<div class="h-screen flex flex-col justify-end pb-14">
+<div class="flex h-screen flex-col justify-end pb-14">
 	<!-- Cabeçalho com título -->
 	<div class="fixed left-1/2 top-8 -translate-x-1/2 transform text-center">
 		<h1 class="text-3xl font-bold">Central de Envio de Pneus</h1>
@@ -21,6 +20,7 @@
 				{endpoint}
 				sortBy={defaultSortBy}
 				sortOrder={defaultSortOrder}
+				TableRow={BorrachariaTableRow}
 			/>
 		</div>
 	</div>

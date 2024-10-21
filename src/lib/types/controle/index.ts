@@ -6,7 +6,6 @@ export interface Borracharia {
 	Produto: string;
 	TipoMov: string;
 	Emissao: string;
-	Produtos?: () => void;
 }
 
 export interface Conferencia {
@@ -41,9 +40,9 @@ export interface Historico {
 }
 
 export interface ItemNF {
+	quantity: number;
 	D2_ITEM: string;
 	D2_COD: string;
 	B1_DESC: string;
 	SALDO: number;
-	quantity: number;
 }

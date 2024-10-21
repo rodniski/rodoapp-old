@@ -4,36 +4,18 @@
 	import Label from './Label.svelte';
 	import { goto } from '$app/navigation';
 	import { IconProgressHelp, IconCloudComputing } from '@tabler/icons-svelte';
-	import { loginToProtheus } from '$api'; // Faz a requisição diretamente ao Protheus
 	import toast from 'svelte-french-toast';
+	import { authStore } from '$stores'; // Importe o authStore
+	import { get } from 'svelte/store';
 
 	let username = '';
 	let password = '';
 	let error = '';
 
-	// Função auxiliar para definir cookies
-	function setCookie(name: string, value: string, days: number) {
-		const date = new Date();
-		date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000); // Expira em "days" dias
-		const expires = `expires=${date.toUTCString()}`;
-		document.cookie = `${name}=${value}; ${expires}; path=/`; // Define o cookie para o domínio inteiro
-	}
-
-	// Função auxiliar para obter o valor de um cookie
-	function getCookie(name: string): string | null {
-		const nameEQ = name + '=';
-		const ca = document.cookie.split(';');
-		for (let i = 0; i < ca.length; i++) {
-			let c = ca[i].trim();
-			if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-		}
-		return null;
-	}
-
 	// Função de login
 	const handleSubmit = async (e: SubmitEvent) => {
-		e.preventDefault(); // Previne o comportamento padrão do formulário
-		error = ''; // Reseta a mensagem de erro
+		e.preventDefault();
+		error = '';
 
 		if (!username || !password) {
 			toast.error('Por favor, preencha todos os campos.', {
@@ -42,32 +24,53 @@
 			return;
 		}
 
-		// Usando o `toast.promise` para lidar com o login
-		toast
-			.promise(
-				loginToProtheus(username, password), // Passando a função de login como a Promise
-				{
-					loading: 'Realizando login...',
-					success: 'Login bem-sucedido!',
-					error: 'Erro ao fazer o login. Verifique suas credenciais.'
-				}
-			)
-			.then((data) => {
-				// Salva o token em um cookie que expira em 7 dias
-				setCookie('token', data.access_token, 7);
-				setCookie('username', username, 7);
-
-				// Redireciona o usuário para a página inicial
-				goto('/app');
-			})
-			.catch((err) => {
-				// Captura o erro e exibe no console
-				console.error('Erro ao fazer login:', err);
-
-				// Exibe a mensagem de erro no toast
-				error = err instanceof Error ? err.message : 'Ocorreu um erro inesperado.';
+		try {
+			// Usando o `toast.promise` para lidar com o login
+			await toast.promise(loginToProtheus(username, password), {
+				loading: 'Realizando login...',
+				success: 'Login bem-sucedido!',
+				error: 'Erro ao fazer o login. Verifique suas credenciais.'
 			});
+
+			// Redireciona o usuário para a página inicial
+			goto('/app');
+		} catch (err) {
+			console.error('Erro ao fazer login:', err);
+			error = err instanceof Error ? err.message : 'Ocorreu um erro inesperado.';
+		}
 	};
+
+	// Função que realiza a requisição de login
+	async function loginToProtheus(username: string, password: string) {
+		const myHeaders = new Headers();
+		myHeaders.append('grant_type', 'password');
+		myHeaders.append('username', username);
+		myHeaders.append('password', password);
+
+		const requestOptions = {
+			method: 'POST',
+			headers: myHeaders,
+			redirect: 'follow' as const
+		};
+
+		const res = await fetch('http://protheus-app:8400/rest/api/oauth2/v1/token', requestOptions);
+
+		if (!res.ok) {
+			const result = await res.text();
+			console.error('Erro na resposta do Protheus:', result);
+			throw new Error(result || 'Falha no login');
+		}
+
+		const data = await res.json();
+		console.log('Resposta do Protheus:', data);
+
+		// Atualiza o authStore com os dados de autenticação
+		authStore.set({
+			isAuthenticated: true,
+			token: data.access_token,
+			username: username
+		});
+	}
 </script>
 
 <!-- Estrutura HTML com Formulário -->
@@ -114,27 +117,25 @@
 
 		<!-- Links adicionais -->
 		<div class="flex gap-3">
-			<button
+			<a
 				class="group/btn relative flex h-10 w-full items-center justify-start space-x-2 rounded-md bg-gray-50 px-4 font-medium text-black shadow-input dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
-				type="button"
+				href="http://hesk.rodoparana.com.br"
+				target="_blank"
+				rel="noopener noreferrer"
 			>
 				<IconProgressHelp class="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
-				<a
-					href="http://hesk.rodoparana.com.br"
-					class="text-sm text-neutral-700 dark:text-neutral-300">Central de Ajuda</a
-				>
-			</button>
+				<span class="text-sm text-neutral-700 dark:text-neutral-300">Central de Ajuda</span>
+			</a>
 
-			<button
+			<a
 				class="group/btn relative flex h-10 w-full items-center justify-start space-x-2 rounded-md bg-gray-50 px-4 font-medium text-black shadow-input dark:bg-zinc-900 dark:shadow-[0px_0px_1px_1px_var(--neutral-800)]"
-				type="button"
+				href="https://sites.google.com/site/baserodoparana/home"
+				target="_blank"
+				rel="noopener noreferrer"
 			>
 				<IconCloudComputing class="h-4 w-4 text-neutral-800 dark:text-neutral-300" />
-				<a
-					href="https://sites.google.com/site/baserodoparana/home"
-					class="text-sm text-neutral-700 dark:text-neutral-300">Intranet</a
-				>
-			</button>
+				<span class="text-sm text-neutral-700 dark:text-neutral-300">Intranet</span>
+			</a>
 		</div>
 	</form>
 </div>

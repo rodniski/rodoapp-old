@@ -6,7 +6,7 @@
 
 	export let title: string;
 	export let isSorted: 'asc' | 'desc' | false | undefined = false;
-	export let columnKey: string; // A chave para identificar a coluna
+	export let columnKey: string | number ; // A chave para identificar a coluna
 	export let onClick: () => void; // Função para ordenação
 
 	let IconComponent = IconSelector;

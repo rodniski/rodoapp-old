@@ -1,1 +1,1 @@
-export { incluirItemPortaria } from './borracharia';
+export { POSTBorracharia } from './borracharia';

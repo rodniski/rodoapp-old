@@ -1,18 +1,20 @@
 import type { Conferencia, Column } from '$types';
-import ActionPortaria from './ActionPortaria.svelte'; // Componente para a ação de conferência
+import { PortariaModal } from '.';
 
 export const LayoutPortaria: Column<Conferencia>[] = [
 	{
 		accessorKey: 'Filial',
 		header: 'Filial',
 		cell: (row: Conferencia) => row.Filial,
-		isFilterable: true
+		isFilterable: true,
+		class:"w-36"
 	},
 	{
 		accessorKey: 'NF',
 		header: 'Nota Fiscal',
 		cell: (row: Conferencia) => row.NF,
-		isFilterable: true
+		isFilterable: true,
+		class:"w-36"
 	},
 	{
 		accessorKey: 'Cliente',
@@ -30,18 +32,20 @@ export const LayoutPortaria: Column<Conferencia>[] = [
 		accessorKey: 'DataHora',
 		header: 'Data/Hora',
 		cell: (row: Conferencia) => row.DataHora,
-		isFilterable: true
+		isFilterable: true,
+		class:"w-36"
 	},
 	{
 		accessorKey: 'Responsavel',
 		header: 'Responsável',
 		cell: (row: Conferencia) => row.Responsavel,
-		isFilterable: true
+		isFilterable: true,
+		class:"w-48 truncate"
 	},
 	{
 		accessorKey: 'actions',
 		header: 'Ações',
-		component: ActionPortaria, // Usa o componente ActionButton para ações
+		component: PortariaModal, // Usa o componente ActionButton para ações
 		props: (row: Conferencia) => ({
 			documento: row.NF, // Passa o NF (nota fiscal)
 			produto: row.Produto, // Passa o Produto
@@ -50,6 +54,7 @@ export const LayoutPortaria: Column<Conferencia>[] = [
 			filial: row.Filial, // Adicionado para uso no componente ActionButton
 			cliente: row.Cliente // Adicionado para uso no componente ActionButton
 		}),
-		isFilterable: false // Ações não são filtráveis
+		isFilterable: false,
+		class:"w-36"
 	}
 ];

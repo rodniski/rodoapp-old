@@ -1,8 +1,7 @@
 <script lang="ts">
 	import Logo from './Logo.svelte';
 	import { goto } from '$app/navigation';
-	import { menuItems } from '$stores';
-	import { getCookie } from '$hooks';
+	import { menuItems, authStore } from '$stores';
 
 	let username = 'Usuário';
 	let isLoading = true;
@@ -15,7 +14,11 @@
 	// Carregar os dados do usuário dos cookies
 	async function loadUserData() {
 		try {
-			const storedUsername = getCookie('username'); // Obtém o username do cookie
+			let storedUsername = '';
+			authStore.subscribe((authState) => {
+				storedUsername = authState.username;
+			});
+
 			if (storedUsername) {
 				const [firstName, lastName] = storedUsername.split('.');
 				username = `${capitalize(firstName)} ${capitalize(lastName)}`;
@@ -32,7 +35,7 @@
 		try {
 			document.cookie = 'username=; Max-Age=0'; // Remove o cookie do username
 			document.cookie = 'token=; Max-Age=0'; // Remove o cookie do token
-			goto('/login'); // Redireciona para a página de login
+			goto('/'); // Redireciona para a página de login
 		} catch (error) {
 			console.error('Erro ao fazer logout:', error);
 		}
@@ -124,21 +127,21 @@
 			<!-- Logout no fim da página -->
 			<div class="mb-4 mt-auto">
 				<button
-					class="group btn btn-outline btn-error relative flex h-full w-full items-center justify-center"
+					class="group btn btn-neutral relative flex h-full w-full items-center justify-center hover:bg-[#b91c1c]"
 					on:click={handleLogout}
 				>
 					<span class="username transition-opacity duration-300 ease-in-out group-hover:opacity-0"
 						>{username}</span
 					>
 					<span
-						class="duration-400 absolute flex items-center justify-center gap-3 font-bold text-black opacity-0 transition-opacity ease-in-out group-hover:opacity-100"
+						class="duration-400 absolute flex items-center justify-center gap-3 font-bold text-white opacity-0 transition-opacity ease-in-out group-hover:opacity-100"
 					>
-						Sair
+						FAZER LOGOUT
 						<lord-icon
 							src="https://cdn.lordicon.com/eoacwhtz.json"
 							trigger="loop"
 							delay="1000"
-							colors="primary:#121331,secondary:#ffffff,tertiary:#ffffff,quaternary:#ffffff,quinary:#ffffff,senary:#ffffff,septenary:#000000"
+							colors="primary:#450a0a,secondary:#ffffff,tertiary:#ffffff,quaternary:#ffffff,quinary:#ffffff,senary:#ffffff,septenary:#b91c1c"
 							style="width:35px;height:35px"
 						>
 						</lord-icon>

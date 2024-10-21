@@ -1,4 +1,3 @@
-export { default as ActionPortaria } from './ActionPortaria.svelte';
-export { default as buttonConferir } from './buttonConferir.svelte';
-export { default as Conferir } from './Conferir.svelte';
+export { default as PortariaTableRow } from './PortariaTableRow.svelte';
+export { default as PortariaModal } from './PortariaModal.svelte';
 export { LayoutPortaria } from './LayoutPortaria';

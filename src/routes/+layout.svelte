@@ -1,30 +1,39 @@
+<!-- src/routes/+layout.svelte -->
 <script lang="ts">
 	import '../app.css';
 	import { Nav, ThemeChanger } from '$components';
-	import { page } from '$app/stores'; // Para acessar a URL atual
-	import { goto } from '$app/navigation';
-	import { onMount } from 'svelte';
 	import { Toaster } from 'svelte-french-toast';
-	import { getCookie } from '$hooks';
+	import { authStore } from '$stores';
+	import { page } from '$app/stores';
+	import { onDestroy, onMount } from 'svelte';
+	import { goto } from '$app/navigation';
 
-	// Função auxiliar para obter o valor de um cookie
+	let isAuthenticated = false;
 
+	// Inscreva-se no authStore para obter o estado de autenticação
+	const unsubscribe = authStore.subscribe((auth) => {
+		isAuthenticated = auth.isAuthenticated;
+	});
 
-	// Verificar o token e redirecionar para login se necessário
+	// Redireciona o usuário para a página de login se não estiver autenticado
 	onMount(() => {
-		const token = getCookie('token'); // Obtém o token do cookie
+		const publicPaths = ['/', '/login', '/intranet'];
+		const currentPath = $page.url.pathname;
 
-		// Se não existir token ou o usuário estiver na página de login, redireciona para login
-		if (!token && $page.url.pathname !== '/') {
-			goto('/login');
+		if (!isAuthenticated && !publicPaths.includes(currentPath)) {
+			goto('/');
 		}
+	});
+
+	onDestroy(() => {
+		unsubscribe();
 	});
 </script>
 
 <html lang="pt-br" class="h-screen w-screen">
 	<header class="z-10">
-		<!-- Exibe a navegação se a rota não for "/" (login) nem "/intranet" -->
-		{#if $page.url.pathname !== '/'}
+		<!-- Exibe a navegação se o usuário estiver autenticado -->
+		{#if isAuthenticated}
 			<Nav />
 			<ThemeChanger />
 		{/if}
