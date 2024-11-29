@@ -16,7 +16,7 @@ export const SkeletonLancamento = () => {
         className="flex flex-row items-center space-x-2 p-2 bg-white rounded-full border border-neutral-100 dark:border-white/[0.2] dark:bg-black"
       >
         <div className="h-6 w-6 flex-shrink-0 rounded-full bg-gradient-to-r from-pink-500 to-violet-500" />
-        <Link href="/Inicio/Lancamentos/Visualizacao" className="group">
+        <Link href="/central/prenota" className="group">
           <motion.span
             initial={{ backgroundPosition: "0% 50%", color: "#6b7280" }}
             whileHover={{
@@ -42,7 +42,7 @@ export const SkeletonLancamento = () => {
         variants={variantsSecond}
         className="flex items-center justify-end space-x-2 p-2 ml-auto w-3/4 bg-white rounded-full border border-neutral-100 dark:border-white/[0.2] dark:bg-black"
       >
-        <Link href="/Inicio/Lancamentos/XML" className="group">
+        <Link href="/central/prenota/XML" className="group">
           <motion.span
             initial={{ backgroundPosition: "0% 50%", color: "#6b7280" }}
             whileHover={{
@@ -70,7 +70,7 @@ export const SkeletonLancamento = () => {
         className="group flex items-center space-x-2 p-2 bg-white rounded-full border border-neutral-100 dark:border-white/[0.2] dark:bg-black"
       >
         <div className="h-6 w-6 flex-shrink-0 rounded-full bg-gradient-to-r from-pink-500 to-violet-500 " />
-        <Link href="/Inicio/Lancamentos/Manual" className="">
+        <Link href="/central/prenota/Manual" className="">
           <motion.span
             initial={{ backgroundPosition: "0% 50%", color: "#6b7280" }}
             whileHover={{
@@ -99,7 +99,7 @@ export const SkeletonLancamento = () => {
 
 const links = [
   {
-    href: "/Inicio/Controle/Borracharia",
+    href: "/central/portaria/lancamento",
     text: "Entregar Pneus",
     badge: "Borracharia",
     variants: {
@@ -108,13 +108,13 @@ const links = [
     },
   },
   {
-    href: "/Inicio/Controle/Portaria",
+    href: "/central/portaria/conferencia",
     text: "Conferir saída de Pneus",
     badge: "Portaria",
     variants: null, // Sem animações específicas
   },
   {
-    href: "/Inicio/Controle/Historico",
+    href: "/central/portaria",
     text: "Ver Timeline de Movimentações",
     badge: "Histórico",
     variants: {

@@ -9,12 +9,13 @@ const Page = () => {
     setBreadcrumbs([
       { label: "RodoApp", href: "/" },
       { label: "Central", href: "/central" },
-      { label: "Histórico de Saídas" },
+      { label: "Pré Notas", href: "/central/prenota" },
+      { label: "Importação de XML" },
     ]);
   }, [setBreadcrumbs]);
   return (
     <div className="h-full w-full flex justify-center items-center">
-      Central Histórico de Saídas
+      Central de Importação 
     </div>
   );
 };

@@ -7,117 +7,50 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
-  SidebarContent,
-  SidebarGroup,
-  SidebarGroupContent,
   SidebarFooter,
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuGroup,
-  DropdownMenuLabel,
-  Avatar,
-  AvatarImage,
-  AvatarFallback,
+  Separator,
 } from "ui";
-import { Inbox, LogOut } from "lucide-react";
-import { menuData } from "./menuData"; // Dados do menu
+import Image from "next/image";
+import { NavUser } from "./nav-user";
+import { SidePages } from "./nav-sidepages";
+import { NavLinks } from "./nav-links";
 
 export function AppSidebar() {
-  const [activeItem, setActiveItem] = React.useState(menuData.navMain[0]);
-
   return (
     <Sidebar
       collapsible="none"
-      className="!w-[calc(var(--sidebar-width-icon)_+_1px)] border-r bg-sidebar"
+      className="!w-[calc(var(--sidebar-width-icon)_+6px)] border-r bg-background h-screen "
     >
       {/* Header do Menu */}
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
-              <a href="#">
-                <div className="flex aspect-square items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                  <Inbox className="size-4" />
-                </div>
+            <SidebarMenuButton size="lg" asChild className="p-2">
+              <a href="/central" className="w-full h-full">
+                <Image
+                  src="/logo.png"
+                  height={30}
+                  width={30}
+                  alt="logo"
+                  className="size-6 aspect-square object-contain dark:invert"
+                />
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-
-      {/* Navegação Principal */}
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {menuData.navMain.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    tooltip={{
-                      children: item.title,
-                      hidden: false,
-                    }}
-                    isActive={activeItem.title === item.title}
-                    onClick={() => setActiveItem(item)}
-                  >
-                    <item.icon className="size-4" />
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-
-      {/* Footer do Menu */}
-      <SidebarFooter>
-        <NavUser />
-      </SidebarFooter>
+ 
+      <div className="flex flex-col justify-between h-full">
+        <div className="h-full space-y-3 py-3">
+          <NavLinks />
+          <Separator />
+          <SidePages />
+        </div>
+        {/* Footer do Menu */}
+        <SidebarFooter>
+          <NavUser />
+        </SidebarFooter>
+      </div>
     </Sidebar>
-  );
-}
-
-function NavUser() {
-  return (
-    <SidebarMenu>
-      <SidebarMenuItem>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <SidebarMenuButton size="icon">
-              <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src="/avatars/default.jpg" alt="User" />
-                <AvatarFallback>U</AvatarFallback>
-              </Avatar>
-            </SidebarMenuButton>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56" align="end">
-            <DropdownMenuLabel className="p-0">
-              <div className="flex items-center gap-2 px-3 py-2">
-                <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src="/avatars/default.jpg" alt="User" />
-                  <AvatarFallback>U</AvatarFallback>
-                </Avatar>
-                <div>
-                  <p className="font-semibold">User Name</p>
-                  <p className="text-xs text-muted-foreground">
-                    user@example.com
-                  </p>
-                </div>
-              </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <LogOut className="mr-2 h-4 w-4" />
-                Sair
-              </DropdownMenuItem>
-            </DropdownMenuGroup>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </SidebarMenuItem>
-    </SidebarMenu>
   );
 }

@@ -12,7 +12,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`antialiased ${inter.className}`}>
+      <body className={`antialiased max-w-screen ${inter.className}`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

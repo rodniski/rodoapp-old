@@ -13,35 +13,45 @@ import {
   Label,
 } from "ui";
 import { useLogin } from "%/hooks/useLogin";
-import { useRouter } from "next/navigation"; // Importando o router para redirecionar
+import { useRouter } from "next/navigation";
+import { useSetAtom } from "jotai";
+import { usernameAtom } from "%/atoms/authStore";
 
 type LoginError = {
   message: string;
 };
 
 const LoginCard = () => {
-  const [username, setUsername] = useState("");
+  const setUsername = useSetAtom(usernameAtom);
+  const [username, setUsernameInput] = useState("");
   const [password, setPassword] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { mutateAsync: login } = useLogin();
-  const router = useRouter(); // Inicializando o router
+  const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
-    await toast.promise(login({ username, password }), {
-      loading: "Fazendo login...",
-      success: "Login bem-sucedido! Bem-vindo ao RodoAPP.",
-      error: (error: LoginError) =>
-        `Erro ao fazer login: ${error.message || "Tente novamente."}`,
-    });
-
-    // Redirecionar após login bem-sucedido
-    router.push("/central");
+    try {
+      await toast.promise(login({ username, password }), {
+        loading: "Fazendo login...",
+        success: "Login bem-sucedido! Bem-vindo ao RodoAPP.",
+        error: (error: LoginError) =>
+          `Erro ao fazer login: ${error.message || "Tente novamente."}`,
+      });
+      setUsername(username); // Atualiza o atom e localStorage
+      router.push("/central");
+    } catch (error) {
+      console.error("Erro ao fazer login:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <div className="z-50 flex justify-center items-center">
+    <div className="z-50 flex justify-center items-center bg-gray-900/40">
       <Card className="bg-slate-800/20 text-white backdrop-blur max-w-sm shadow-lg">
         <CardHeader>
           <CardTitle className="text-2xl text-white">
@@ -63,9 +73,10 @@ const LoginCard = () => {
                 type="text"
                 placeholder="nome.sobrenome"
                 value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={(e) => setUsernameInput(e.target.value)}
                 required
                 className="text-white"
+                aria-label="Usuário do Protheus"
               />
             </div>
             <div className="space-y-2">
@@ -75,19 +86,20 @@ const LoginCard = () => {
               <Input
                 id="password"
                 type="password"
-                placeholder="*****"
+                placeholder="Sua senha"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 className="text-white"
+                aria-label="Senha"
               />
             </div>
             <Button
               type="submit"
               className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-              disabled={!username || !password}
+              disabled={!username || !password || isSubmitting}
             >
-              Entrar
+              {isSubmitting ? "Entrando..." : "Entrar"}
             </Button>
           </form>
         </CardContent>

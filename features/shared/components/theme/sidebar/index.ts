@@ -1,3 +1,5 @@
 export * from "./app-sidebar";
 export * from "./menuData";
-export * from "./SidebarMenu";
+export * from "./nav-links";
+export * from "./nav-sidepages";
+export * from "./nav-user";
