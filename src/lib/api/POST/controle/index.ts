@@ -1,1 +1,0 @@
-export { POSTBorracharia } from './borracharia';

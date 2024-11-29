@@ -1,22 +1,13 @@
+# Aliases Configurados no Projeto
+
+Os aliases foram configurados para simplificar os imports no projeto.
+
+## Exemplo de Configuração
+Veja abaixo como os aliases foram configurados no `tsconfig.json`:
+
+```json
 {
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
     "paths": {
       "!/*": ["./features/assinatura/*"],
       "!": ["./features/assinatura"],
@@ -26,14 +17,8 @@
       "#": ["./features/prenota"],
       "$/*": ["./features/shared/*"],
       "$": ["./features/shared"],
-      "%/*": ["./features/login/*"],
-      "%": ["./features/login"],
-      "&/*": ["./features/central/*"],
-      "&": ["./features/central"],
       "components/*": ["./features/shared/components/*"],
       "components": ["./features/shared/components"],
-      "ui/*": ["./features/shared/components/ui/*"],
-      "ui": ["./features/shared/components/ui"],
       "constants/*": ["./features/shared/constants/*"],
       "constants": ["./features/shared/constants"],
       "hooks/*": ["./features/shared/hooks/*"],
@@ -45,7 +30,5 @@
       "utils/*": ["./features/shared/utils/*"],
       "utils": ["./features/shared/utils"]
     }
-  },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  }
 }
